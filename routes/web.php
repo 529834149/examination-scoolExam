@@ -14,3 +14,6 @@
 Route::get('/', function () {
     return view('welcome');
 });
+//Route::get('excel/export','ExcelController@export');
+Route::get('excel/import/examination/results','ExcelController@import');//会考成绩导入
+Route::get('examination/results','ExcelController@index');//前端上传
