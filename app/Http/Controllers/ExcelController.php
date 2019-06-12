@@ -13,6 +13,7 @@ class ExcelController extends Controller
      */
 	public function import(Request $request)
 	{
+		return view('student/list');
 		// ini_set('max_execution_time', '0');//设置永不超时，无限执行下去直到结束
 
         // $filePath = 'excel/import/'.iconv('UTF-8', 'GBK', 'knowledge').'.xlsx';
@@ -24,7 +25,7 @@ class ExcelController extends Controller
             
 	}
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource. 
      *
      * @return \Illuminate\Http\Response
      */

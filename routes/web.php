@@ -11,9 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 //Route::get('excel/export','ExcelController@export');
 Route::get('excel/import/examination/results','ExcelController@import');//会考成绩导入
-Route::get('examination/results','ExcelController@index');//前端上传
+//Route::get('/','ExcelController@index');//前端上传
+Route::get('/', 'PagesController@root')->name('root');
+Route::get('get_student_data', 'StudentController@index')->name('index');
