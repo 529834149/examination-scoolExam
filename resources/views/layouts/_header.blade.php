@@ -21,12 +21,12 @@
             <ul class="nav navbar-nav">
 
             </ul>
-
             <!-- Right Side Of Navbar -->
             <ul class="nav navbar-nav navbar-right">
                 <!-- Authentication Links -->
                 <li><a href="#">登录</a></li>
                 <li><a href="#">注册</a></li>
+				<li><a href="/excel/import/examination/results">导入成绩</a></li>
             </ul>
         </div>
     </div>

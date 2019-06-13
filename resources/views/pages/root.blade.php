@@ -7,6 +7,7 @@
 	
 @stop
 @section('content')
+
 	<h3>昌隆镇七年二班成绩</h3>
 	<table id="student"  lay-filter="test"></table>
 	<blockquote>
