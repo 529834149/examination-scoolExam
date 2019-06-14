@@ -18,8 +18,8 @@
 <script src="{{ asset('default/layui-v2.5.4/layui/layui.js') }}"></script>
 <script type="text/html" id="barDemo">
   <a class="layui-btn layui-btn-xs" lay-event="chart">统计</a>
-  <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+ <!-- <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
   
 
 </script>
@@ -53,18 +53,50 @@ layui.use('table', function(){
 	  });							
 		table.on('tool(test)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
 			var data = obj.data; //获得当前行数据
-		 
+		
 			var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
 		 
 			var tr = obj.tr; //获得当前行 tr 的DOM对象
 		 
 		if(layEvent === 'chart'){ //统计图
 				//主要处理当前学生与上个月成绩曲线图
-			layer.confirm('上个月与本月成绩是否生成图标', function(index){
+			//进行弹框显示
+			window.location.href= 'show_student_chart/'+data.record_id;
+			// layer.confirm('上个月与本月成绩是否生成图标', function(index){
+				// layer.open({
+					// closeBtn: 0,
+					// scrollbar: false,// 屏蔽浏览器滚动
+					// anim: 1,
+					// shade: 0.5,
+					// resize:false,
+					// type: 2,
+					// title: ['成绩分布图','background-color:#004F8E;border-bottom:0px solid #eee;;'],
+					// maxmin: false,
+					// shadeClose: false, //点击遮罩关闭层
+					// area : ['100%' , '100%'],
+					// content: 'show_student_chart/'+data.record_id,
+					// //closeBtn: 0,//关闭当前按钮
+					// //moveOut: true, 是否允许拖动操作
+					// //弹出时成功回调
+					 // // success: function(layero, index){
+						// // console.log(layero, index);
+					  // // }
+					// cancel: function(index, layero){ 
+					  
+					// },
+					// success: function(layero){
+						// //$('#lookReport').css('display','block');
+						// //layero.find('.layui-layer-min').remove();
+						// //layero.find('.layui-layer-max').remove();
+						// //layero.find('.layui-layer-title').remove();
+						// // layui-layer-title  background-color:#004F8E;      /* border-bottom: 1px solid #eee; */
+						
+					// },
+				// });
 				
-			  layer.close(index);
-			  //向服务端发送删除指令
-			});
+				// layer.close(index);
+			  // //向服务端发送删除指令
+			// });
 			//do somehing
 		} else if(layEvent === 'del'){ //删除
 				layer.confirm('真的删除行么', function(index){

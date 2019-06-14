@@ -22,24 +22,7 @@ class ExcelController extends Controller
 		$get_teacher = Teacher::get_teacher();
 		return view('excel/create',compact('get_class','get_grade','get_teacher'));   
 	}
-	/**
-     * Display a listing of the resource.
-     *
-     * @msg 导入成绩单
-     */
-	public function import(Request $request)
-	{
-		return view('student/list');
-		// ini_set('max_execution_time', '0');//设置永不超时，无限执行下去直到结束
-
-        // $filePath = 'excel/import/'.iconv('UTF-8', 'GBK', 'knowledge').'.xlsx';
 	
-        // Excel::load($filePath, function($reader) {
-            // $data = $reader->all();
-			// //如果数据存在就自动清空
-		// });	
-            
-	}
     /**
      * Display a listing of the resource. 
      *
@@ -68,6 +51,7 @@ class ExcelController extends Controller
      */
     public function store(Request $request)
     {
+		ini_set('max_execution_time', '0');//设置永不超时，无限执行下去直到结束
 		$file = request()->file('file'); // 获取上传的文件
 		if($file==null){
 			exit(json_encode(array('code'=>1,'msg'=>'未上传图片')));
@@ -81,19 +65,19 @@ class ExcelController extends Controller
 		$filename = 'file' . '_' . time() . '_' . str_random(10) . '.' . $extension;
 	
 		// 判断文件是否合法
-		if(!in_array($extension,array("xls"))){
+		if(!in_array($extension,array("xls","xlsx"))){
 			exit(json_encode(array('code'=>1,'msg'=>'上传文件不合法')));
 		}
 		
 		$info = $file->move($upload_path, $filename);// 移动文件到指定目录 没有则创建
-		
 		$img = $folder_name.'/'.$filename;
 		exit(json_encode(array('code'=>200,'data'=>$img)));
 
 
     }
-	public function import_excel_data(Request $request)
+	public function import(Request $request)
 	{
+		
 		 $validator = \Validator::make(
 		 [
 			'grade'=>$request->input('grade'),
@@ -111,21 +95,58 @@ class ExcelController extends Controller
         if($validator->fails()){
             return response()->json(['code' => 400,'msg'=>'非法操作，请刷新页面重新填写']);
         }
-		
-		$filePath = $request->input('file');
-		
-		$urls = config('app.url').'/'.$filePath;//获取主域名
-		Excel::load($filePath, function($reader) {
-			$data = $reader->all();
-			dd($data);
+		try{
+			$filePath = $request->input('file');	
+			$urls = config('app.url').'/'.$filePath;//获取主域名
+			//ini_set('max_execution_time', '0');//设置永不超时，无限执行下去直到结束
+			$param = array(
+				'grade'=>$request->input('grade'),
+				'class'=>$request->input('class'),
+				'teacher'=>$request->input('teacher'),
+				'month'=>$request->input('month'),
+				'file'=>$request->input('file'),
+			);
 			
-		});
+			Excel::load($filePath, function($reader) use($param) {
+		
+				$reader = $reader->getSheet(0);//excel第一张sheet
+				$results = $reader->toArray();
+				unset($results[0]);//去除表头
+				unset($results[1]);
+				//数据库
+				$data = [];
+				foreach($results as $k=>$v){
+				
+					if($v['2']){
+						$data[$k]['student_name'] = $v['0'];
+						$data[$k]['chinese'] = intval($v['1']);//语文
+						$data[$k]['mathematics'] = intval($v['2']);//数学
+						$data[$k]['english'] = intval($v['3']);//英语
+						$data[$k]['politics'] = intval($v['4']);//政治
+						$data[$k]['history'] = intval($v['5']);//历史
+						$data[$k]['biology'] = intval($v['6']);//生物
+						$data[$k]['physics'] = intval($v['7']);//物理
+						$data[$k]['total'] = intval($v['8']);//总分  
+						$data[$k]['year'] =intval(date('Y'));//年  
+						$data[$k]['grade_name'] =intval($param['grade']);//年级  
+						$data[$k]['class_name'] =intval($param['class']);//班级  
+						$data[$k]['position_name'] ='学生';//职位  
+						$data[$k]['school_id'] =1;//学校  
+						$data[$k]['teacher_id'] =intval($param['teacher']);
+						$data[$k]['month'] =intval($param['month']);
+					}
+					continue;
+				}
+				$datas = \DB::table('record')->insert($data);
+			});
+			return response()->json(['code' => 200,'msg'=>' 导入成功']);
+		}catch ( \Exception $e){
+			if($e->getCode() ==0){
+				return response()->json(['code' => 400,'msg'=>' 网络错误']);
+			}
+		}
 		
 		
-		
-		return response()->json(['code' => 200, 'msg' => '题目没有完全作答']);
-		$all = $request->all();
-		$file_path = $request->input('file');
 	}
 
     /**

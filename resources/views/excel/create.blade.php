@@ -84,11 +84,18 @@
 	<div class="layui-form-item">
 		<label class="layui-form-label">图片</label>
 		<div class="layui-input-block">
-			
 			<button class="layui-btn layui-btn-sm" onclick="return false;" id="upload">
 				<i class="layui-icon">&#xe67c;</i>上传成绩单(xls文件)
 			</button><span id="statu" style="color:green;display:none"><i class="layui-icon">&#xe605;</i></span>
 			<input type="hidden" name="file" value="" id="preview" lay-verify="required">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">下载</label>
+		<div class="layui-input-block">
+			<button class="layui-btn-norma layui-btn-sm">
+				<i class="layui-icon">&#xe601</i><a href="{{ asset('default/excel/import/demo.xls') }}">下载案例模版(xls文件)</a>
+			</button>
 		</div>
 	</div>
   <div class="layui-form-item">
@@ -98,6 +105,7 @@
     </div>
   </div>
 </form>
+
 @stop
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="{{ asset('default/layui-v2.5.4/layui/layui.js') }}"></script>
@@ -143,24 +151,20 @@
 	// //监听提交
 	form.on('submit(submit_data)', function(data){
 		var data = data.field;
-	
 		$.ajax({
-			url:'/upload_file_submit',
+			url:'/excel/import',
 			method:'post',
 			 headers: {
 				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 			},
 			data:data,
-
 			dataType:'json',
 			beforeSend:function(){
 				// 加载层
 				var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
 			},
-			complete: function () {
-				//完成后清除cookie信息
-			},
 			success:function(res){
+				
 				if(res.code ==400){
 					layer.closeAll('loading'); 
 					layer.msg(res.msg);
@@ -171,15 +175,14 @@
 				}else{
 					layer.closeAll('loading'); 
 					layer.msg("导入成功...",function(){
-					  window.location.href="/" 
+					  window.location.href="/teachers/manage/students" 
 					},2000);
 				}
-				console.log(res)
+				
 			},
-			error:function (data) {
-			}
+			
 		})
-		return false;
+		
 	});
 });
 </script>

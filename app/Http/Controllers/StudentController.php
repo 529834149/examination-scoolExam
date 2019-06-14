@@ -46,5 +46,18 @@ class StudentController extends Controller
 
 		return response()->json($list);
     }
+	public function chart(Request $request,$id)
+	{	
+		$record = Record::select('chinese','mathematics','english','politics','history','biology','physics')->find($id);
+		$data = [];
+		array_push($data,$record['chinese']);
+		array_push($data,$record['mathematics']);
+		array_push($data,$record['english']);
+		array_push($data,$record['politics']);
+		array_push($data,$record['history']);
+		array_push($data,$record['biology']);
+		array_push($data,$record['physics']);
+		return view('pages.chart',compact('data'));
+	}
 	
 }
