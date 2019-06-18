@@ -277,7 +277,7 @@ function forEach(obj, fn) {
   }
 
   // Force an array if not already something iterable
-  if (typeof obj !== 'object' && !isArray(obj)) {
+  if (typeof obj !== 'object') {
     /*eslint no-param-reassign:0*/
     obj = [obj];
   }
@@ -781,7 +781,7 @@ module.exports = function xhrAdapter(config) {
       var responseData = !config.responseType || config.responseType === 'text' ? request.responseText : request.response;
       var response = {
         data: responseData,
-        // IE sends 1223 instead of 204 (https://github.com/mzabriskie/axios/issues/201)
+        // IE sends 1223 instead of 204 (https://github.com/axios/axios/issues/201)
         status: request.status === 1223 ? 204 : request.status,
         statusText: request.status === 1223 ? 'No Content' : request.statusText,
         headers: responseHeaders,
@@ -987,7 +987,7 @@ window.Vue = __webpack_require__(35);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example', __webpack_require__(39));
+Vue.component('example-component', __webpack_require__(39));
 
 var app = new Vue({
   el: '#app'
@@ -1048,7 +1048,9 @@ if (token) {
 
 // window.Echo = new Echo({
 //     broadcaster: 'pusher',
-//     key: 'your-pusher-key'
+//     key: 'your-pusher-key',
+//     cluster: 'mt1',
+//     encrypted: true
 // });
 
 /***/ }),
@@ -31488,8 +31490,6 @@ var defaults = __webpack_require__(2);
 var utils = __webpack_require__(0);
 var InterceptorManager = __webpack_require__(28);
 var dispatchRequest = __webpack_require__(29);
-var isAbsoluteURL = __webpack_require__(31);
-var combineURLs = __webpack_require__(32);
 
 /**
  * Create a new instance of Axios
@@ -31520,11 +31520,6 @@ Axios.prototype.request = function request(config) {
 
   config = utils.merge(defaults, this.defaults, { method: 'get' }, config);
   config.method = config.method.toLowerCase();
-
-  // Support baseURL config
-  if (config.baseURL && !isAbsoluteURL(config.url)) {
-    config.url = combineURLs(config.baseURL, config.url);
-  }
 
   // Hook up interceptors middleware
   var chain = [dispatchRequest, undefined];
@@ -31734,6 +31729,15 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 var utils = __webpack_require__(0);
 
+// Headers whose duplicates are ignored by node
+// c.f. https://nodejs.org/api/http.html#http_message_headers
+var ignoreDuplicateOf = [
+  'age', 'authorization', 'content-length', 'content-type', 'etag',
+  'expires', 'from', 'host', 'if-modified-since', 'if-unmodified-since',
+  'last-modified', 'location', 'max-forwards', 'proxy-authorization',
+  'referer', 'retry-after', 'user-agent'
+];
+
 /**
  * Parse headers into an object
  *
@@ -31761,7 +31765,14 @@ module.exports = function parseHeaders(headers) {
     val = utils.trim(line.substr(i + 1));
 
     if (key) {
-      parsed[key] = parsed[key] ? parsed[key] + ', ' + val : val;
+      if (parsed[key] && ignoreDuplicateOf.indexOf(key) >= 0) {
+        return;
+      }
+      if (key === 'set-cookie') {
+        parsed[key] = (parsed[key] ? parsed[key] : []).concat([val]);
+      } else {
+        parsed[key] = parsed[key] ? parsed[key] + ', ' + val : val;
+      }
     }
   });
 
@@ -32017,6 +32028,8 @@ var utils = __webpack_require__(0);
 var transformData = __webpack_require__(30);
 var isCancel = __webpack_require__(7);
 var defaults = __webpack_require__(2);
+var isAbsoluteURL = __webpack_require__(31);
+var combineURLs = __webpack_require__(32);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -32035,6 +32048,11 @@ function throwIfCancellationRequested(config) {
  */
 module.exports = function dispatchRequest(config) {
   throwIfCancellationRequested(config);
+
+  // Support baseURL config
+  if (config.baseURL && !isAbsoluteURL(config.url)) {
+    config.url = combineURLs(config.baseURL, config.url);
+  }
 
   // Ensure headers exist
   config.headers = config.headers || {};
@@ -44505,7 +44523,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/Example.vue"
+Component.options.__file = "resources/assets/js/components/ExampleComponent.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -44514,9 +44532,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-650f2efa", Component.options)
+    hotAPI.createRecord("data-v-7168fb6a", Component.options)
   } else {
-    hotAPI.reload("data-v-650f2efa", Component.options)
+    hotAPI.reload("data-v-7168fb6a", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -44703,7 +44721,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-650f2efa", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-7168fb6a", module.exports)
   }
 }
 

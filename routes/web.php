@@ -10,20 +10,12 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', 'PagesController@school')->name('school');
 
-//Route::get('excel/export','ExcelController@export');
-Route::get('excel/import/examination/results','ExcelController@show_web');//导入excel信息录入
-Route::get('excel/import/examination/submit','ExcelController@store');//导入excel信息录入
-Route::post('upload_file','ExcelController@store');//处理file文件
-Route::post('excel/import','ExcelController@import');//处理file文件
+Route::get('/', 'PagesController@root')->name('root');
 
-//Route::get('/','ExcelController@index');//前端上传
-Route::get('/teachers/manage/students', 'PagesController@root')->name('root');
-Route::get('get_student_data/{id}', 'StudentController@show')->name('show');
-Route::get('show_student_chart/{id}', 'StudentController@chart')->name('chart');
+//Auth::routes();
 
-//登录逻辑
+// Authentication Routes...
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login');
 Route::post('logout', 'Auth\LoginController@logout')->name('logout');
