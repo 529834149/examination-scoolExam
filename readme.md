@@ -9,8 +9,9 @@
 
 ## 本项目运用的知识点
 
-## 样式调整，每次需要保存刷新页面，这次运用了运行 Laravel Mix，非常不错节省不少时间
+## 运行 Laravel Mix
 
+- **注:样式调整，每次需要保存刷新页面，这次运用了运行 Laravel Mix，非常不错节省不少时间**
 - **$ yarn config set registry https://registry.npm.taobao.org**
 - **$ yarn install**
 - **$ npm run watch-poll**
