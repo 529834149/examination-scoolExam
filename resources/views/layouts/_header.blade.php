@@ -12,7 +12,7 @@
 
             <!-- Branding Image -->
             <a class="navbar-brand" href="{{ url('/') }}">
-                LaraBBS
+                昌隆镇九年一贯制成绩系统
             </a>
         </div>
 
@@ -48,6 +48,12 @@
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                     {{ csrf_field() }}
                                 </form>
+                            </li>
+							<li>
+                                <a href="/excel/import">
+                                    导入成绩单
+                                </a>
+
                             </li>
                         </ul>
                     </li>

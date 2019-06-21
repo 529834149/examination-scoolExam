@@ -11,7 +11,8 @@
     <title>@yield('title', '学校系统') - Laravel 进阶教程</title>
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}?{{time()}}" rel="stylesheet">
+	<link href="{{ asset('default/layui-v2.5.4/layui/css/layui.css') }}?{{time()}}" rel="stylesheet">
 </head>
 
 <body>
@@ -29,6 +30,7 @@
     </div>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}?{{time()}}"></script>
+	
 </body>
 </html>
