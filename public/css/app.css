@@ -8384,3 +8384,7 @@ body {
   color: inherit;
 }
 
+.thumbnail {
+  padding: 5px !important;
+}
+

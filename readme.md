@@ -25,14 +25,21 @@
 - 生成配置文件config/captcha.php
 
 
-## Contributing
+## 资源路由
+- **可以看到使用 resource 方法不仅节省很多代码，且严格遵循了 RESTful URI 的规范，在后续的开发中，我会优先选择 resource 路由。**
+- **Route::resource('users', 'UsersController', ['only' => ['show', 'update', 'edit']]);**
+- **上面代码将等同于：**
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- **Route::get('/users/{user}', 'UsersController@show')->name('users.show');**
+- **Route::get('/users/{user}/edit', 'UsersController@edit')->name('users.edit');**
+- **Route::patch('/users/{user}', 'UsersController@update')->name('users.update');**
 
-## Security Vulnerabilities
+## 中文语言包
+- **composer require "overtrue/laravel-lang:~3.0"：**
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 时间戳友好输出
+- **$user->created_at->diffForHumans() **
+- **如果想变成中文在AppServiceProvider里添加boot中添加 \Carbon\Carbon::setLocale('zh');**
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 首页运用了让layui前端框架
+- **$https://www.layui.com/doc/modules/table.html **
